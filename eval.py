@@ -21,11 +21,11 @@ class Evaluator(object):
         # image transform
         input_transform = transforms.Compose([
             transforms.ToTensor(),
-            transforms.Normalize([.485, .456, .406], [.229, .224, .225]),
+            #transforms.Normalize([.485, .456, .406], [.229, .224, .225]),
         ])
         # dataset and dataloader
         val_dataset = get_segmentation_dataset(args.dataset, split='val', mode='testval',
-                                               transform=input_transform)
+                                               transform=None)
         self.val_loader = data.DataLoader(dataset=val_dataset,
                                           batch_size=1,
                                           shuffle=False)
@@ -40,10 +40,15 @@ class Evaluator(object):
         for i, (image, label) in enumerate(self.val_loader):
             image = image.to(self.args.device)
 
+            image = image.permute(0,3,1,2)
+            image = image/255
+            print(self.args.device)
             outputs = self.model(image)
 
             pred = torch.argmax(outputs[0], 1)
             pred = pred.cpu().data.numpy()
+            pred = (pred == 11) | (pred == 12)
+            label = (label == 11) | (label == 12)
             label = label.numpy()
 
             self.metric.update(pred, label)
@@ -60,3 +65,4 @@ if __name__ == '__main__':
     evaluator = Evaluator(args)
     print('Testing model: ', args.model)
     evaluator.eval()
+

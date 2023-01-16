@@ -40,10 +40,10 @@ class CitySegmentation(data.Dataset):
     BASE_DIR = 'cityscapes'
     NUM_CLASS = 19
 
-    def __init__(self, root='./datasets/citys', split='train', mode=None, transform=None,
+    def __init__(self, root='/home/juliuswunderlich/asa-83-sensorfusion/rgbd/data_/cityscapes', split='train', mode=None, transform=None,
                  base_size=520, crop_size=480, **kwargs):
         super(CitySegmentation, self).__init__()
-        self.root = root
+        self.root = '/home/juliuswunderlich/asa-83-sensorfusion/rgbd/data_/cityscapes'
         self.split = split
         self.mode = mode if mode is not None else split
         self.transform = transform
@@ -210,3 +210,4 @@ def _get_city_pairs(folder, split='train'):
 if __name__ == '__main__':
     dataset = CitySegmentation()
     img, label = dataset[0]
+

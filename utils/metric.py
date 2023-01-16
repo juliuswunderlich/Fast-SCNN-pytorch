@@ -15,7 +15,7 @@ class SegmentationMetric(object):
 
     def __init__(self, nclass):
         super(SegmentationMetric, self).__init__()
-        self.nclass = nclass
+        self.nclass = 2
         self.lock = threading.Lock()
         self.reset()
 
@@ -73,9 +73,13 @@ class SegmentationMetric(object):
 def batch_pix_accuracy(predict, target):
     """PixAcc"""
     # inputs are numpy array, output 4D, target 3D
+
     assert predict.shape == target.shape
+    """
     predict = predict.astype('int64') + 1
     target = target.astype('int64') + 1
+    """
+    
 
     pixel_labeled = np.sum(target > 0)
     pixel_correct = np.sum((predict == target) * (target > 0))
@@ -167,3 +171,4 @@ def compute_score(hist, correct, labeled):
     mean_pixel_acc = correct / labeled
 
     return iu, mean_IU, mean_IU_no_back, mean_pixel_acc
+

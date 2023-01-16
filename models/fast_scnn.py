@@ -255,3 +255,4 @@ if __name__ == '__main__':
     img = torch.randn(2, 3, 256, 512)
     model = get_fast_scnn('citys')
     outputs = model(img)
+
